@@ -21,3 +21,15 @@ pip install -r requirements.txt
 python -m nltk.downloader brown
 
 ```
+
+### Experiments and Evaluation
+
+1. Preproces SimLex-999 (The gold standard corpus G) to prepare topk (k = 10) ranked words for each word in the corpus 
+2. Prepare Brown corpus (C) (initially genre = 'news' and 'romance') for vectorizing
+3. We vectorize the corpora using TF-TDF and Word2Vec baselines (v)
+4. We compare the performance of these vectorizers using the gold standard (G) SimLex-999
+5. For each baseline v, we compute the topk similar words of word w based on the cosine similarity of vectors for w and the other word (the vectors given by baseline v)
+6. We evaluate using NDCG metric made available by eval() function
+
+
+Link : https://github.com/jamil2388/Vector_Semantics
