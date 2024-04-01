@@ -96,7 +96,7 @@ def calculate_topk(df, word1, word2 = None):
     return similar_words, ratings
 
 # lazy load the simlex preprocessed dataframe
-def prepare_simlex(filepath = None):
+def prepare_simlex(filepath):
 
     data = load_file(filepath)
     if data is not None: return data

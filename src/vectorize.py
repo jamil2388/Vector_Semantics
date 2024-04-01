@@ -24,7 +24,7 @@ import re
 def preprocess_text(text):
     text = ' '.join(text) # Join the tokens into a single string
     text = re.sub(r"[^a-zA-Z0-9\s]", "", text) # Remove unnecessary characters
-    return text
+    return text.lower()
 
 def extract_corpus(raw_corpus, category):
     c = []
@@ -38,7 +38,7 @@ def tfidf(c):
     vectorizer = TfidfVectorizer()
     tfidf_vectors = vectorizer.fit_transform(c) # Transform the corpus into TF-IDF vectors
     print("Shape of TF-IDF matrix:", tfidf_vectors.shape)
-    return vectorizer, tfidf_vectors
+    return vectorizer, tfidf_vectors.transpose() # now each row would represent each word vector
 
 # extract vocab, index and the vectors from the model and store it in a dataframe
 def index_vectors(model, vectors, tfidf = 1):
@@ -51,15 +51,15 @@ def index_vectors(model, vectors, tfidf = 1):
     # Create a new column 'vector' in df
     df['vector'] = None
 
-    # Iterate over each row in df
-    for index, row in df.iterrows():
-        # Get the index from the row
-        index_val = row['index']
-        # Check if the index exists in the tfidf_vectors matrix
-        if index_val in vocab_dict.values():
-            vector = vectors[:, index_val]
-            # Assign the vector to the 'vector' column in df
-            df.at[index, 'vector'] = vector.todense()
+    # # Iterate over each row in df
+    # for index, row in df.iterrows():
+    #     # Get the index from the row
+    #     index_val = row['index']
+    #     # Check if the index exists in the tfidf_vectors matrix
+    #     if index_val in vocab_dict.values():
+    #         vector = vectors[:, index_val]
+    #         # Assign the vector to the 'vector' column in df
+    #         df.at[index, 'vector'] = vector.todense()
 
     return df
 
@@ -80,16 +80,16 @@ if __name__ == '__main__':
     print("Number of sentences in the news genre of Brown corpus:", len(brown.sents(categories=['news'])))
     print("Number of sentences in the romance genre of Brown corpus:", len(brown.sents(categories=['romance'])))
 
+    simlex_vocab = prepare_simlex('../data/simlex_prep.pkl')
+
     # two different vectors for news and romance corpora
     vectorizer_news, tfidf_vectors_news = tfidf(brown_news)
     print(tfidf_vectors_news.todense())
-    vocab_news = index_vectors(vectorizer_news, tfidf_vectors_news, 1)# create a dataframe containing the vocabulary, index and their tfidf, word2vec vectors
+    news_df = index_vectors(vectorizer_news, tfidf_vectors_news, 1)# create a dataframe containing the vocabulary, index and their tfidf, word2vec vectors
+    filtered_words = [word for word in simlex_vocab['word'] if word in vectorizer_news.vocabulary_] # we only work on words in the simlex_vocab, which are present in our brown corpus genres
+    f_simlex_vocab = simlex_vocab[simlex_vocab['word'].isin(filtered_words)] # Filter simlex_vocab based on the filtered words
 
-    vectorizer_romance, tfidf_vectors_romance = tfidf(brown_romance)
-    print(tfidf_vectors_romance.todense())
-    vocab_romance = index_vectors(vectorizer_romance, tfidf_vectors_romance, 1)
 
-    simlex_df = prepare_simlex()
 
 
 
