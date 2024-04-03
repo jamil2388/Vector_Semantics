@@ -20,6 +20,10 @@ pip install -r requirements.txt
 # download the required corpora
 python -m nltk.downloader brown
 
+# run vectorize.py to calculate ndcg for all combinations of baselines at one go
+cd src
+python -u vectorize.py
+
 ```
 
 ### Experiments and Evaluation
