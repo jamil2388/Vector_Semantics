@@ -208,9 +208,11 @@ if __name__ == '__main__':
         print(f'')
         corpus = extract_corpus(brown, category)
 
-        for v in ['w2v']: # tfidf and w2v
-            for cw in [1, 2, 5, 10]:
-                for d in [10, 50, 100, 300]:
+        for v in ['tfidf']: # tfidf and w2v
+            CW = [1, 2, 5, 10] if v == 'w2v' else [1]
+            D = [10, 50, 100, 300] if v == 'w2v' else [1]
+            for cw in CW:
+                for d in D:
                     settings = {'e': 1000, 'cw': cw,
                                 'd': d}  # context window size : {1, 2, 5, 10}, vector size : {10, 50, 100, 300}
 
