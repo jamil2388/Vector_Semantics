@@ -41,7 +41,7 @@ def extract_corpus(corpus, category):
     word_count = 0
     words = set()
     for i, sent in enumerate(corpus.sents(categories=[category])):
-        if i > 10 : break
+        # if i > 10 : break
         c.append((preprocess_text(sent)))
         word_count += len(c[i].replace('  ', '').split())
         words.update(c[i].replace('  ', '').split())
@@ -157,7 +157,7 @@ def run_semantics(c, v, settings, simlex_vocab):
         model, vectors = tfidf_train(c)
     elif v == 'w2v':
         tfidf = 0
-        c = tokenize(c) # we need a specific tokenized format for training w2v
+        if not isinstance(c[0], list): c = tokenize(c) # we need a specific tokenized format for training w2v
         model = Word2Vec(sentences = c, vector_size = settings['d'], window = settings['cw'], min_count = 1, workers = 4)
         vectors = model.wv.vectors
     else : return
@@ -206,7 +206,7 @@ if __name__ == '__main__':
 
     for category in categories:
         print(f'')
-        c = extract_corpus(brown, category)
+        corpus = extract_corpus(brown, category)
 
         for v in ['w2v']: # tfidf and w2v
             for cw in [1, 2, 5, 10]:
@@ -218,7 +218,7 @@ if __name__ == '__main__':
 
                     print(f'---------- Starting category {category}, Baseline : {v} ------------')
 
-                    score = run_semantics(c, v, settings, simlex_vocab) # run the entire pipeline for this setting
+                    score = run_semantics(corpus, v, settings, simlex_vocab) # run the entire pipeline for this setting
                     end_time = time.time()
                     runtime = end_time - start_time
 
