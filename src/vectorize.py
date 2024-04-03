@@ -176,7 +176,7 @@ def run_semantics(c, v, settings, simlex_vocab):
     ndcg_10 = eval(Y, f_c_df['rankings'])
     print(f'average ndcg_10 : {ndcg_10}')
 
-    return ndcg_10
+    return ndcg_10['mean'].iloc[0]
 
 
 if __name__ == '__main__':
@@ -235,9 +235,9 @@ if __name__ == '__main__':
                         best_baseline['d'] = d
                         print(f'\t .... For Settings : {best_baseline}')
 
-                    if score['mean'] > best_score:
+                    if score > best_score:
                         print(f'|||||||||||||||')
-                        print(f'Best Score Recorded : {score["mean"]}')
+                        print(f'Best Score Recorded : {score}')
                         best_score = score
                         best_baseline['v'] = v
                         best_baseline['cw'] = cw
