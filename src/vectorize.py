@@ -235,9 +235,9 @@ if __name__ == '__main__':
                         best_baseline['d'] = d
                         print(f'\t .... For Settings : {best_baseline}')
 
-                    if score > best_score:
+                    if score['mean'] > best_score:
                         print(f'|||||||||||||||')
-                        print(f'Best Score Recorded : {score}')
+                        print(f'Best Score Recorded : {score["mean"]}')
                         best_score = score
                         best_baseline['v'] = v
                         best_baseline['cw'] = cw
