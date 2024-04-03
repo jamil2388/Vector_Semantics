@@ -45,6 +45,10 @@ def preprocess_simlex(filepath, cols):
     sorted_df = df.sort_values(by='SimLex999', ascending=False) # Sort DataFrame by rating SimLex999 ratings in descending order
     simlex_vocab = pd.DataFrame({'word': vocab, 'topk' : pd.Series(), 'sim_rating' : pd.Series()})
 
+    print(f'SimLex-999 : ')
+    print(f'\tUnique Words : {len(vocab)}')
+    print(f'\tTotal Word Pairs : {len(df["word1"])}')
+
     return sorted_df, simlex_vocab
 
 # create a column which contains the top 10 most similar word indices
